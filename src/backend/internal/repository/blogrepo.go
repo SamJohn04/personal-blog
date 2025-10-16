@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"time"
 
 	"github.com/SamJohn04/personal-blog/src/backend/internal/model"
@@ -37,6 +38,11 @@ func GetBlogTitles() []model.BlogTitle {
 	return blogTitles
 }
 
-func GetBlogPost(id int) model.BlogPost {
-	return blogPosts[id]
+func GetBlogPost(id int) (model.BlogPost, error) {
+	for _, blogPost := range blogPosts {
+		if blogPost.Id == id {
+			return blogPost, nil
+		}
+	}
+	return model.BlogPost{}, errors.New("not found")
 }

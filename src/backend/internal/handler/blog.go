@@ -19,9 +19,14 @@ func GetBlog(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		log.Println("Blog ID is missing:", err)
-		http.Error(w, "Blog ID is missing", 404)
+		http.Error(w, "Blog ID is missing", http.StatusNotFound)
 		return
 	}
-	blog := repository.GetBlogPost(id)
+	blog, err := repository.GetBlogPost(id)
+	if err != nil {
+		log.Println("Blog is missing.")
+		http.Error(w, "Blog is missing", http.StatusNotFound)
+		return
+	}
 	json.NewEncoder(w).Encode(blog)
 }

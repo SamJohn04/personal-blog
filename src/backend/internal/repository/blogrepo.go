@@ -10,8 +10,8 @@ import (
 var blogPosts = []model.BlogPost{
 	{
 		Id:            1,
-		Title:         "Title 1",
-		Content:       "Hello, World!\n",
+		Title:         "Hello World",
+		Content:       "Hello, World!\nHow are you?\n",
 		CreatedAt:     time.Now(),
 		LastUpdatedAt: time.Now(),
 	},
@@ -37,6 +37,6 @@ func GetBlogTitles() []model.BlogTitle {
 	return blogTitles
 }
 
-func GetBlogPost(index int) model.BlogPost {
-	return blogPosts[index]
+func GetBlogPost(id int) model.BlogPost {
+	return blogPosts[id]
 }

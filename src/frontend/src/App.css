@@ -2,10 +2,6 @@
   padding: 1.5rem;
 }
 
-header {
-  padding-bottom: 2rem;
-}
-
 #header-text {
   font-size: 1.75rem;
   font-weight: 500;
@@ -20,6 +16,10 @@ a {
   font-size: 1.2rem;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pad-t-8 {
+  padding-top: 2rem;
 }
 
 .pad-y-1 {

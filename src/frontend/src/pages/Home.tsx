@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <>
       <DefaultHeader />
-      <main className="main">
+      <main className="main pad-t-8">
       {
         blogTitles.map(blogTitle => <span key={blogTitle.id} className="index-item pad-y-1">
                        <b>

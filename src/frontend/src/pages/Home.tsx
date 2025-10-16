@@ -14,6 +14,9 @@ export default function Home() {
   useEffect(() => {
     async function getBlogTitles() {
       const res = await fetch("/api/blogs");
+      if (!res.ok) {
+        return;
+      }
       const data = await res.json();
       setBlogTitles(data.map((blogTitle: any) => ({
         id: blogTitle.id,
@@ -22,18 +25,22 @@ export default function Home() {
         lastEditedAt: new Date(blogTitle.lastEditedAt),
       })));
     }
-    getBlogTitles()
-  });
+    getBlogTitles();
+  }, []);
 
   return (
     <>
       <DefaultHeader />
+      <main className="main">
       {
-        blogTitles.map(blogTitle => <Link key={blogTitle.id} className="index-item pad-y-1" to={`/blog/${blogTitle.id}`}>
-                       <span>{blogTitle.title}</span>
+        blogTitles.map(blogTitle => <span key={blogTitle.id} className="index-item pad-y-1">
+                       <b>
+                        <Link to={`/blog/${blogTitle.id}`}>{blogTitle.title}</Link>
+                       </b>
                        <span>{blogTitle.createdAt.toDateString()}</span>
-                       </Link>)
+                       </span>)
       }
+      </main>
     </>
   );
 }

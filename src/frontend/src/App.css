@@ -18,11 +18,15 @@ a {
 
 .index-item {
   font-size: 1.2rem;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .pad-y-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+}
+
+.main {
+  max-width: 1024px;
 }

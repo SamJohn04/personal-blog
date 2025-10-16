@@ -15,6 +15,7 @@ func Run() {
 	r.Use(middleware.Logger)
 
 	r.Get("/blogs", handler.GetBlogTitles)
+	r.Get("/blog/{id}", handler.GetBlog)
 
 	log.Println("Starting server on", 8000)
 	http.ListenAndServe(":8000", r)

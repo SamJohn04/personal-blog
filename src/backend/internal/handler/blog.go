@@ -11,7 +11,12 @@ import (
 )
 
 func GetBlogTitles(w http.ResponseWriter, r *http.Request) {
-	blogTitles := repository.GetBlogTitles()
+	blogTitles, err := repository.GetBlogTitles()
+	if err != nil {
+		log.Println("DB error:", err)
+		http.Error(w, "Database error", http.StatusInternalServerError)
+		return
+	}
 	json.NewEncoder(w).Encode(blogTitles)
 }
 

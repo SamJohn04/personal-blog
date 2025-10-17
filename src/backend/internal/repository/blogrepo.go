@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/SamJohn04/personal-blog/src/backend/internal/config"
 	"github.com/SamJohn04/personal-blog/src/backend/internal/model"
 )
 
@@ -25,17 +26,32 @@ var blogPosts = []model.BlogPost{
 	},
 }
 
-func GetBlogTitles() []model.BlogTitle {
+func GetBlogTitles() ([]model.BlogTitle, error) {
 	blogTitles := []model.BlogTitle{}
-	for _, blogPost := range blogPosts {
+
+	rows, err := config.DB.Query(
+		"SELECT id, title, createdAt, LastUpdatedAt FROM blog",
+	)
+	if err != nil {
+		return blogTitles, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		var title string
+		var createdAt, lastUpdatedAt time.Time
+
+		rows.Scan(&id, &title, &createdAt, &lastUpdatedAt)
 		blogTitles = append(blogTitles, model.BlogTitle{
-			Id:            blogPost.Id,
-			Title:         blogPost.Title,
-			CreatedAt:     blogPost.CreatedAt,
-			LastUpdatedAt: blogPost.LastUpdatedAt,
+			Id:            id,
+			Title:         title,
+			CreatedAt:     createdAt,
+			LastUpdatedAt: lastUpdatedAt,
 		})
 	}
-	return blogTitles
+
+	return blogTitles, nil
 }
 
 func GetBlogPost(id int) (model.BlogPost, error) {

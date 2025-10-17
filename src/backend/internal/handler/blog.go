@@ -29,7 +29,7 @@ func GetBlog(w http.ResponseWriter, r *http.Request) {
 	}
 	blog, err := repository.GetBlogPost(id)
 	if err != nil {
-		log.Println("Blog is missing.")
+		log.Println("Database error or blog missing:", err)
 		http.Error(w, "Blog is missing", http.StatusNotFound)
 		return
 	}

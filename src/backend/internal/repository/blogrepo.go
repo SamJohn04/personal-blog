@@ -1,36 +1,17 @@
 package repository
 
 import (
-	"errors"
 	"time"
 
 	"github.com/SamJohn04/personal-blog/src/backend/internal/config"
 	"github.com/SamJohn04/personal-blog/src/backend/internal/model"
 )
 
-// TODO convert to db
-var blogPosts = []model.BlogPost{
-	{
-		Id:            1,
-		Title:         "Hello World",
-		Content:       "Hello, World!\nHow are you?\n",
-		CreatedAt:     time.Now(),
-		LastUpdatedAt: time.Now(),
-	},
-	{
-		Id:            2,
-		Title:         "Title 2",
-		Content:       "Hi there ^.^",
-		CreatedAt:     time.Now(),
-		LastUpdatedAt: time.Now(),
-	},
-}
-
 func GetBlogTitles() ([]model.BlogTitle, error) {
 	blogTitles := []model.BlogTitle{}
 
 	rows, err := config.DB.Query(
-		"SELECT id, title, createdAt, LastUpdatedAt FROM blog",
+		"SELECT id, title, createdAt, lastUpdatedAt FROM blog",
 	)
 	if err != nil {
 		return blogTitles, err
@@ -55,10 +36,23 @@ func GetBlogTitles() ([]model.BlogTitle, error) {
 }
 
 func GetBlogPost(id int) (model.BlogPost, error) {
-	for _, blogPost := range blogPosts {
-		if blogPost.Id == id {
-			return blogPost, nil
-		}
+	var title, content string
+	var createdAt, lastUpdatedAt time.Time
+
+	row := config.DB.QueryRow(
+		"SELECT title, content, createdAt, lastUpdatedAt FROM blog WHERE id=?",
+		id,
+	)
+	err := row.Scan(&title, &content, &createdAt, &lastUpdatedAt)
+	if err != nil {
+		return model.BlogPost{}, err
 	}
-	return model.BlogPost{}, errors.New("not found")
+
+	return model.BlogPost{
+		Id:            id,
+		Title:         title,
+		Content:       content,
+		CreatedAt:     createdAt,
+		LastUpdatedAt: lastUpdatedAt,
+	}, nil
 }

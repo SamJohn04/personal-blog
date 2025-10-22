@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"time"
 
 	"github.com/SamJohn04/personal-blog/src/backend/internal/config"
@@ -55,4 +56,34 @@ func GetBlogPost(id int) (model.BlogPost, error) {
 		CreatedAt:     createdAt,
 		LastUpdatedAt: lastUpdatedAt,
 	}, nil
+}
+
+func CreatePost(title, content string) error {
+	_, err := config.DB.Exec(
+		"INSERT INTO blog (title, content, createdAt, lastUpdatedAt) VALUES (?, ?, ?, ?)",
+		title,
+		content,
+		time.Now(),
+		time.Now(),
+	)
+	return err
+}
+
+func EditPost(editedPost model.BlogPost) error {
+	res, err := config.DB.Exec(
+		"UPDATE blog SET title = ?, content = ?, lastUpdatedAt = ? WHERE id = ?",
+		editedPost.Title,
+		editedPost.Content,
+		time.Now(),
+		editedPost.Id,
+	)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil || rowsAffected == 0 {
+		return errors.New("blog not found")
+	}
+	return nil
 }

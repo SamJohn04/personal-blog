@@ -10,7 +10,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var DB *sql.DB
+type Config struct {
+	JWTSecret string
+}
+
+var (
+	Cfg Config
+	DB  *sql.DB
+)
 
 func init() {
 	err := godotenv.Load()
@@ -18,6 +25,10 @@ func init() {
 		log.Println("No .env found. Ignore if it is not needed.")
 	}
 	initDB()
+
+	Cfg = Config{
+		JWTSecret: os.Getenv("JWT_SECRET"),
+	}
 }
 
 func initDB() {

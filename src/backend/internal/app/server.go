@@ -14,6 +14,9 @@ func Run() {
 
 	r.Use(middleware.Logger)
 
+	r.Post("/register", handler.RegisterUser)
+	r.Post("/login", handler.Login)
+
 	r.Get("/blogs", handler.GetBlogTitles)
 	r.Get("/blog/{id}", handler.GetBlog)
 

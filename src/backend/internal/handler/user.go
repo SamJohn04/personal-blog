@@ -38,3 +38,31 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 }
+
+func Login(w http.ResponseWriter, r *http.Request) {
+	var req AuthRequest
+	json.NewDecoder(r.Body).Decode(&req)
+
+	user, err := repository.GetUserByEmail(req.Email)
+	if err != nil {
+		http.Error(w, "user does not exist", http.StatusBadRequest)
+		return
+	} else if req.Username != user.Username {
+		http.Error(w, "wrong username", http.StatusUnauthorized)
+		return
+	}
+
+	if !utils.CheckPasswordHash(req.Password, user.Password) {
+		http.Error(w, "invalid credentials", http.StatusUnauthorized)
+		return
+	}
+
+	token, err := utils.GenerateJWT(user.Email)
+	if err != nil {
+		http.Error(w, "something went wrong", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{
+		"token": token,
+	})
+}

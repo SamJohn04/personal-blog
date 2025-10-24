@@ -28,5 +28,23 @@ a {
 }
 
 .main {
+  margin: 0 auto;
   max-width: 1024px;
+}
+
+.signup-signin-form {
+  margin: 2rem auto;
+  max-width: 1024px;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.col-span-full {
+  grid-column: 1 / -1;
+}
+
+input {
+  padding: 0.25rem;
 }

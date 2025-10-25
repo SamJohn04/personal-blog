@@ -27,8 +27,8 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	hashed, err := utils.HashPassword(req.Password)
 	if err != nil {
-		log.Println("Could not hash password:", err)
-		http.Error(w, "Could not hash password", http.StatusInternalServerError)
+		log.Println("Error: Could not hash password:", err)
+		http.Error(w, "could not hash password", http.StatusInternalServerError)
 		return
 	}
 
@@ -39,7 +39,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 	err = repository.CreateUser(user)
 	if err != nil {
-		log.Println("Registeration failed:", err)
+		log.Println("Error: Registeration failed:", err)
 		http.Error(w, "username and/or email already exists", http.StatusConflict)
 		return
 	}
@@ -53,13 +53,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	user, err := repository.GetUserByEmail(req.Email)
 	if err != nil {
-		log.Println("User does not exist:", err)
+		log.Println("Error: User does not exist:", err)
 		http.Error(w, "user does not exist", http.StatusBadRequest)
 		return
 	}
 
 	if !utils.CheckPasswordHash(req.Password, user.Password) {
-		log.Println("Passwords do not match, or something went wrong")
+		log.Println("Error: Passwords do not match, or something went wrong")
 		http.Error(w, "invalid credentials", http.StatusUnauthorized)
 		return
 	}

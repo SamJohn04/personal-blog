@@ -13,7 +13,7 @@ import (
 func GetBlogTitles(w http.ResponseWriter, r *http.Request) {
 	blogTitles, err := repository.GetBlogTitles()
 	if err != nil {
-		log.Println("DB error:", err)
+		log.Println("Error: DB error:", err)
 		http.Error(w, "Database error", http.StatusInternalServerError)
 		return
 	}
@@ -23,13 +23,13 @@ func GetBlogTitles(w http.ResponseWriter, r *http.Request) {
 func GetBlog(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
-		log.Println("Blog ID is missing:", err)
+		log.Println("Error: Blog ID is missing:", err)
 		http.Error(w, "Blog ID is missing", http.StatusNotFound)
 		return
 	}
 	blog, err := repository.GetBlogPost(id)
 	if err != nil {
-		log.Println("Database error or blog missing:", err)
+		log.Println("Error: Database error or blog missing:", err)
 		http.Error(w, "Blog is missing", http.StatusNotFound)
 		return
 	}

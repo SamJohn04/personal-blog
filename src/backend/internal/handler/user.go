@@ -23,7 +23,12 @@ type LoginAuthRequest struct {
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	var req RegisterAuthRequest
-	json.NewDecoder(r.Body).Decode(&req)
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		log.Println("Error: while decoding body:", err)
+		http.Error(w, "error while decoding body", http.StatusBadRequest)
+		return
+	}
 
 	if req.Username == "" || req.Email == "" || req.Password == "" {
 		log.Println("Error: The username, email or password is empty")
@@ -55,7 +60,12 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	var req LoginAuthRequest
-	json.NewDecoder(r.Body).Decode(&req)
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		log.Println("Error: while decoding body:", err)
+		http.Error(w, "error while decoding body", http.StatusBadRequest)
+		return
+	}
 
 	user, err := repository.GetUserByEmail(req.Email)
 	if err != nil {

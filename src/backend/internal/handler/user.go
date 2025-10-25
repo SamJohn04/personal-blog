@@ -10,14 +10,19 @@ import (
 	"github.com/SamJohn04/personal-blog/src/backend/internal/utils"
 )
 
-type AuthRequest struct {
+type RegisterAuthRequest struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
+type LoginAuthRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
-	var req AuthRequest
+	var req RegisterAuthRequest
 	json.NewDecoder(r.Body).Decode(&req)
 
 	hashed, err := utils.HashPassword(req.Password)
@@ -43,17 +48,13 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	var req AuthRequest
+	var req LoginAuthRequest
 	json.NewDecoder(r.Body).Decode(&req)
 
 	user, err := repository.GetUserByEmail(req.Email)
 	if err != nil {
 		log.Println("User does not exist:", err)
 		http.Error(w, "user does not exist", http.StatusBadRequest)
-		return
-	} else if req.Username != user.Username {
-		log.Println("Wrong username:", req.Username, user.Username)
-		http.Error(w, "wrong username", http.StatusUnauthorized)
 		return
 	}
 

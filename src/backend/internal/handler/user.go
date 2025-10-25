@@ -25,6 +25,12 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	var req RegisterAuthRequest
 	json.NewDecoder(r.Body).Decode(&req)
 
+	if req.Username == "" || req.Email == "" || req.Password == "" {
+		log.Println("Error: The username, email or password is empty")
+		http.Error(w, "empty username or email or password", http.StatusBadRequest)
+		return
+	}
+
 	hashed, err := utils.HashPassword(req.Password)
 	if err != nil {
 		log.Println("Error: Could not hash password:", err)

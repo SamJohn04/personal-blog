@@ -17,11 +17,13 @@ export default function Login() {
         password,
       }),
     });
-    if (res.ok) {
-      alert("Success!");
-    } else {
+    if (!res.ok) {
       alert("Something went wrong...");
+      return;
     }
+    const body = await res.json();
+    localStorage.setItem("authToken", body.token);
+    localStorage.setItem("authLevel", body.authLevel);
   }
 
   return (

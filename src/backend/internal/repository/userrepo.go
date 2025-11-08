@@ -18,9 +18,9 @@ func GetUserByEmail(email string) (model.User, error) {
 	user.Email = email
 
 	err := config.DB.QueryRow(
-		"SELECT id, username, password_hash FROM users WHERE email=?",
+		"SELECT id, username, password_hash, auth_level FROM users WHERE email=?",
 		email,
-	).Scan(&user.Id, &user.Username, &user.Password)
+	).Scan(&user.Id, &user.Username, &user.Password, &user.AuthLevel)
 
 	return user, err
 }

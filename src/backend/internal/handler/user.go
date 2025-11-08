@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/SamJohn04/personal-blog/src/backend/internal/model"
 	"github.com/SamJohn04/personal-blog/src/backend/internal/repository"
@@ -87,6 +88,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(map[string]string{
-		"token": token,
+		"token":     token,
+		"authLevel": strconv.Itoa(user.AuthLevel),
 	})
 }

@@ -6,9 +6,15 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/SamJohn04/personal-blog/src/backend/internal/middleware"
 	"github.com/SamJohn04/personal-blog/src/backend/internal/repository"
 	"github.com/go-chi/chi/v5"
 )
+
+type CreateRequest struct {
+	Title   string `json:"title"`
+	Content string `json:"content"`
+}
 
 func GetBlogTitles(w http.ResponseWriter, r *http.Request) {
 	blogTitles, err := repository.GetBlogTitles()
@@ -34,4 +40,28 @@ func GetBlog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(blog)
+}
+
+func CreateBlog(w http.ResponseWriter, r *http.Request) {
+	var req CreateRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		log.Println("Error: while decoding body:", err)
+		http.Error(w, "error while decoding body", http.StatusBadRequest)
+		return
+	}
+
+	authLevel, err := middleware.GetUserAuth(r)
+	if err != nil || authLevel != 3 {
+		log.Println("Error: auth level check failed. Error:", err, "; Auth level:", authLevel)
+		http.Error(w, "level check failed", http.StatusUnauthorized)
+		return
+	}
+	err = repository.CreatePost(req.Title, req.Content)
+	if err != nil {
+		log.Println("Error: creating post failed:", err)
+		http.Error(w, "create post failed", http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
 }

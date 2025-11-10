@@ -20,6 +20,12 @@ func Run() {
 	r.Get("/blogs", handler.GetBlogTitles)
 	r.Get("/blog/{id}", handler.GetBlog)
 
+	r.Route("/blog", func(r chi.Router) {
+		r.Use(middleware.Auth)
+
+		r.Post("/", handler.CreateBlog)
+	})
+
 	log.Println("Starting server on", 8000)
 	http.ListenAndServe(":8000", r)
 }

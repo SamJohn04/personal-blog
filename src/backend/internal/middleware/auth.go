@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"errors"
+	"log"
 	"net/http"
 	"strings"
 
@@ -30,24 +31,28 @@ func Auth(next http.Handler) http.Handler {
 			return []byte(config.Cfg.JWTSecret), nil
 		})
 		if err != nil {
+			log.Println("Error:", err)
 			http.Error(w, "Something went wrong", http.StatusBadGateway)
 			return
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok || !token.Valid {
+			log.Println("Error: token not ok or invalid")
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
 
 		email, ok := claims["email"].(string)
 		if !ok {
+			log.Println("Error:", err)
 			http.Error(w, "Something went wrong", http.StatusBadGateway)
 			return
 		}
 
 		err = config.DB.QueryRow("SELECT id, auth_level FROM users WHERE email=?", email).Scan(&id, &authLevel)
 		if err != nil {
+			log.Println("Error: Unauthorized:", err)
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}

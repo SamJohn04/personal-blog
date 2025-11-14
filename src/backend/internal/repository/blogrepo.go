@@ -69,13 +69,13 @@ func CreatePost(title, content string) error {
 	return err
 }
 
-func EditPost(editedPost model.BlogPost) error {
+func EditPost(id int, title, content string) error {
 	res, err := config.DB.Exec(
 		"UPDATE blog SET title = ?, content = ?, lastUpdatedAt = ? WHERE id = ?",
-		editedPost.Title,
-		editedPost.Content,
+		title,
+		content,
 		time.Now(),
-		editedPost.Id,
+		id,
 	)
 	if err != nil {
 		return err

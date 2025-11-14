@@ -11,19 +11,12 @@ import (
 	"github.com/SamJohn04/personal-blog/src/backend/internal/utils"
 )
 
-type RegisterAuthRequest struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-type LoginAuthRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
-	var req RegisterAuthRequest
+	var req struct {
+		Username string `json:"username"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		log.Println("Error: while decoding body:", err)
@@ -60,7 +53,10 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	var req LoginAuthRequest
+	var req struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		log.Println("Error: while decoding body:", err)

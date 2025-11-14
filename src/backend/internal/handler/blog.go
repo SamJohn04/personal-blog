@@ -37,11 +37,6 @@ func GetBlog(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(blog)
 }
 
-type CreateRequest struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
-}
-
 func CreateBlog(w http.ResponseWriter, r *http.Request) {
 	authLevel, err := middleware.GetUserAuth(r)
 	if err != nil || authLevel != 3 {
@@ -50,7 +45,10 @@ func CreateBlog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var req CreateRequest
+	var req struct {
+		Title   string `json:"title"`
+		Content string `json:"content"`
+	}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		log.Println("Error: while decoding body:", err)
@@ -66,12 +64,6 @@ func CreateBlog(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-type EditRequest struct {
-	Id      int    `json:"id"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
-}
-
 func EditBlog(w http.ResponseWriter, r *http.Request) {
 	authLevel, err := middleware.GetUserAuth(r)
 	if err != nil || authLevel != 3 {
@@ -80,7 +72,11 @@ func EditBlog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var req EditRequest
+	var req struct {
+		Id      int    `json:"id"`
+		Title   string `json:"title"`
+		Content string `json:"content"`
+	}
 	err = json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		log.Println("Error: while decoding body:", err)

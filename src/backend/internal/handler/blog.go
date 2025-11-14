@@ -11,11 +11,6 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type CreateRequest struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
-}
-
 func GetBlogTitles(w http.ResponseWriter, r *http.Request) {
 	blogTitles, err := repository.GetBlogTitles()
 	if err != nil {
@@ -40,6 +35,11 @@ func GetBlog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(blog)
+}
+
+type CreateRequest struct {
+	Title   string `json:"title"`
+	Content string `json:"content"`
 }
 
 func CreateBlog(w http.ResponseWriter, r *http.Request) {

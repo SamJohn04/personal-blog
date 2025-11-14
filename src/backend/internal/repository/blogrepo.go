@@ -12,7 +12,7 @@ func GetBlogTitles() ([]model.BlogTitle, error) {
 	blogTitles := []model.BlogTitle{}
 
 	rows, err := config.DB.Query(
-		"SELECT id, title, createdAt, lastUpdatedAt FROM blog",
+		"SELECT id, title, created_at, last_updated_at FROM blog",
 	)
 	if err != nil {
 		return blogTitles, err
@@ -41,7 +41,7 @@ func GetBlogPost(id int) (model.BlogPost, error) {
 	var createdAt, lastUpdatedAt time.Time
 
 	row := config.DB.QueryRow(
-		"SELECT title, content, createdAt, lastUpdatedAt FROM blog WHERE id=?",
+		"SELECT title, content, created_at, last_updated_at FROM blog WHERE id=?",
 		id,
 	)
 	err := row.Scan(&title, &content, &createdAt, &lastUpdatedAt)
@@ -60,7 +60,7 @@ func GetBlogPost(id int) (model.BlogPost, error) {
 
 func CreateBlogPost(title, content string) error {
 	_, err := config.DB.Exec(
-		"INSERT INTO blog (title, content, createdAt, lastUpdatedAt) VALUES (?, ?, ?, ?)",
+		"INSERT INTO blog (title, content, created_at, last_updated_at) VALUES (?, ?, ?, ?)",
 		title,
 		content,
 		time.Now(),
@@ -71,7 +71,7 @@ func CreateBlogPost(title, content string) error {
 
 func EditBlogPost(id int, title, content string) error {
 	res, err := config.DB.Exec(
-		"UPDATE blog SET title = ?, content = ?, lastUpdatedAt = ? WHERE id = ?",
+		"UPDATE blog SET title = ?, content = ?, last_updated_at = ? WHERE id = ?",
 		title,
 		content,
 		time.Now(),

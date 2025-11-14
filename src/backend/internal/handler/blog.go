@@ -72,8 +72,14 @@ func EditBlog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		log.Println("Error: Blog ID is missing:", err)
+		http.Error(w, "Blog ID is missing", http.StatusNotFound)
+		return
+	}
+
 	var req struct {
-		Id      int    `json:"id"`
 		Title   string `json:"title"`
 		Content string `json:"content"`
 	}
@@ -83,7 +89,7 @@ func EditBlog(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error while decoding body", http.StatusBadRequest)
 		return
 	}
-	err = repository.EditBlogPost(req.Id, req.Title, req.Content)
+	err = repository.EditBlogPost(id, req.Title, req.Content)
 	if err != nil {
 		log.Println("Error: editing blog post failed:", err)
 		http.Error(w, "edit blog post failed", http.StatusInternalServerError)

@@ -57,10 +57,10 @@ func CreateBlog(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error while decoding body", http.StatusBadRequest)
 		return
 	}
-	err = repository.CreatePost(req.Title, req.Content)
+	err = repository.CreateBlogPost(req.Title, req.Content)
 	if err != nil {
-		log.Println("Error: creating post failed:", err)
-		http.Error(w, "create post failed", http.StatusInternalServerError)
+		log.Println("Error: creating blog post failed:", err)
+		http.Error(w, "create blog post failed", http.StatusInternalServerError)
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
@@ -87,10 +87,10 @@ func EditBlog(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error while decoding body", http.StatusBadRequest)
 		return
 	}
-	err = repository.EditPost(req.Id, req.Title, req.Content)
+	err = repository.EditBlogPost(req.Id, req.Title, req.Content)
 	if err != nil {
-		log.Println("Error: editing post failed:", err)
-		http.Error(w, "edit post failed", http.StatusInternalServerError)
+		log.Println("Error: editing blog post failed:", err)
+		http.Error(w, "edit blog post failed", http.StatusInternalServerError)
 		return
 	}
 	w.WriteHeader(http.StatusOK)

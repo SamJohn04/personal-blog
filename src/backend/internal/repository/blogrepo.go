@@ -58,7 +58,7 @@ func GetBlogPost(id int) (model.BlogPost, error) {
 	}, nil
 }
 
-func CreatePost(title, content string) error {
+func CreateBlogPost(title, content string) error {
 	_, err := config.DB.Exec(
 		"INSERT INTO blog (title, content, createdAt, lastUpdatedAt) VALUES (?, ?, ?, ?)",
 		title,
@@ -69,7 +69,7 @@ func CreatePost(title, content string) error {
 	return err
 }
 
-func EditPost(id int, title, content string) error {
+func EditBlogPost(id int, title, content string) error {
 	res, err := config.DB.Exec(
 		"UPDATE blog SET title = ?, content = ?, lastUpdatedAt = ? WHERE id = ?",
 		title,
@@ -89,7 +89,7 @@ func EditPost(id int, title, content string) error {
 }
 
 // TODO make this function soft delete instead of hard delete
-func DeletePost(id int) error {
+func DeleteBlogPost(id int) error {
 	res, err := config.DB.Exec("DELETE FROM blog WHERE id=?", id)
 	if err != nil {
 		return err

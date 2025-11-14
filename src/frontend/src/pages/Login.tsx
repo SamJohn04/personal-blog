@@ -1,12 +1,18 @@
 import { useState, type FormEvent } from "react";
 import DefaultHeader from "../components/DefaultHeader";
+import { useNavigate } from "react-router";
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   async function login(event: FormEvent) {
     event.preventDefault();
+    setLoading(true);
     const res = await fetch("/api/login", {
       method: "POST",
       headers: {
@@ -19,11 +25,13 @@ export default function Login() {
     });
     if (!res.ok) {
       alert("Something went wrong...");
+      setLoading(false);
       return;
     }
     const body = await res.json();
     localStorage.setItem("authToken", body.token);
     localStorage.setItem("authLevel", body.authLevel);
+    navigate("/");
   }
 
   return (
@@ -47,7 +55,7 @@ export default function Login() {
             type="password"
             required />
 
-          <button className="col-span-full" type="submit">Log In</button>
+          <button className="col-span-full" disabled={loading} type="submit">Log In</button>
         </form>
       </main>
     </>

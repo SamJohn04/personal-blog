@@ -1,13 +1,19 @@
 import { useState, type FormEvent } from "react";
 import DefaultHeader from "../components/DefaultHeader";
+import { useNavigate } from "react-router";
 
 export default function Signup() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   async function register(event: FormEvent) {
     event.preventDefault();
+    setLoading(true);
     const res = await fetch("/api/register", {
       method: "POST",
       headers: {
@@ -21,9 +27,10 @@ export default function Signup() {
     });
 
     if (res.ok) {
-      alert("Success!");
+      navigate("/login");
     } else {
       alert("Something went wrong...");
+      setLoading(false);
     }
   }
 
@@ -56,6 +63,7 @@ export default function Signup() {
 
           <button
             className="col-span-full"
+            disabled={loading}
             type="submit">Sign Up</button>
         </form>
       </main>

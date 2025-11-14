@@ -12,21 +12,26 @@ import (
 func Run() {
 	r := chi.NewRouter()
 
-	r.Use(middleware.Logger)
+	r.Route("/api", func(r chi.Router) {
+		r.Use(middleware.Logger)
 
-	r.Post("/register", handler.RegisterUser)
-	r.Post("/login", handler.Login)
+		r.Post("/register", handler.RegisterUser)
+		r.Post("/login", handler.Login)
 
-	r.Get("/blogs", handler.GetBlogTitles)
-	r.Get("/blog/{id}", handler.GetBlog)
+		r.Get("/blogs", handler.GetBlogTitles)
+		r.Get("/blog/{id}", handler.GetBlog)
 
-	r.Route("/blog", func(r chi.Router) {
-		r.Use(middleware.Auth)
+		r.Route("/blog", func(r chi.Router) {
+			r.Use(middleware.Auth)
 
-		r.Post("/", handler.CreateBlog)
-		r.Put("/{id}", handler.EditBlog)
-		r.Delete("/{id}", handler.DeleteBlog)
+			r.Post("/", handler.CreateBlog)
+			r.Put("/{id}", handler.EditBlog)
+			r.Delete("/{id}", handler.DeleteBlog)
+		})
 	})
+
+	fs := http.FileServer(http.Dir("../frontend/dist"))
+	r.Handle("/*", fs)
 
 	log.Println("Starting server on", 8000)
 	http.ListenAndServe(":8000", r)

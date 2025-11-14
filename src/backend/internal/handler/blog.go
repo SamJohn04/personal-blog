@@ -97,3 +97,26 @@ func EditBlog(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 }
+
+func DeleteBlog(w http.ResponseWriter, r *http.Request) {
+	authLevel, err := middleware.GetUserAuth(r)
+	if err != nil || authLevel != 3 {
+		log.Println("Error: auth level check failed. Error:", err, "; Auth level:", authLevel)
+		http.Error(w, "level check failed", http.StatusUnauthorized)
+		return
+	}
+
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		log.Println("Error: Blog ID is missing:", err)
+		http.Error(w, "Blog ID is missing", http.StatusNotFound)
+		return
+	}
+	err = repository.DeleteBlogPost(id)
+	if err != nil {
+		log.Println("Error: deleting blog post failed:", err)
+		http.Error(w, "delete blog post failed", http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}

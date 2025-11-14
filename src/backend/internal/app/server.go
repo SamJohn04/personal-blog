@@ -25,6 +25,7 @@ func Run() {
 
 		r.Post("/", handler.CreateBlog)
 		r.Put("/{id}", handler.EditBlog)
+		r.Delete("/{id}", handler.DeleteBlog)
 	})
 
 	log.Println("Starting server on", 8000)

@@ -87,3 +87,17 @@ func EditPost(editedPost model.BlogPost) error {
 	}
 	return nil
 }
+
+// TODO make this function soft delete instead of hard delete
+func DeletePost(id int) error {
+	res, err := config.DB.Exec("DELETE FROM blog WHERE id=?", id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil || rowsAffected == 0 {
+		return errors.New("blog not found")
+	}
+	return nil
+}

@@ -43,18 +43,18 @@ type CreateRequest struct {
 }
 
 func CreateBlog(w http.ResponseWriter, r *http.Request) {
-	var req CreateRequest
-	err := json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		log.Println("Error: while decoding body:", err)
-		http.Error(w, "error while decoding body", http.StatusBadRequest)
-		return
-	}
-
 	authLevel, err := middleware.GetUserAuth(r)
 	if err != nil || authLevel != 3 {
 		log.Println("Error: auth level check failed. Error:", err, "; Auth level:", authLevel)
 		http.Error(w, "level check failed", http.StatusUnauthorized)
+		return
+	}
+
+	var req CreateRequest
+	err = json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		log.Println("Error: while decoding body:", err)
+		http.Error(w, "error while decoding body", http.StatusBadRequest)
 		return
 	}
 	err = repository.CreatePost(req.Title, req.Content)

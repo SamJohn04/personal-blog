@@ -1,9 +1,11 @@
+import { Link } from "react-router";
+
 export default function DefaultHeader() {
   const email = getLoggedInEmail();
   return (
     <header>
-      <span id="header-text">Personal Blog</span>
-      <span id="email">{email ? email : <a href="/signup">Sign Up</a>}</span>
+      <span id="header-text"><Link to="/">Personal Blog</Link></span>
+      <span id="email">{email ? email : <Link to="/signup">Sign Up</Link>}</span>
     </header>
   )
 }

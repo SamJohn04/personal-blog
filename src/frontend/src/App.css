@@ -63,3 +63,8 @@ input {
 .button-1 {
   padding: 0.25rem 0.75rem;
 }
+
+#signup-link-login-page, #login-link-signup-page {
+  color: #AAA;
+  text-align: center;
+}

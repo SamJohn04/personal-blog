@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import DefaultHeader from "../components/DefaultHeader";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -57,6 +57,7 @@ export default function Login() {
             required />
 
           <button className="col-span-full" disabled={loading} type="submit">Log In</button>
+          <Link to="/signup" id="signup-link-login-page" className="col-span-full">Sign Up Instead</Link>
         </form>
       </main>
     </>

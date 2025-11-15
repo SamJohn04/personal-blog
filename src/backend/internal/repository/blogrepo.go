@@ -41,7 +41,7 @@ func GetBlogPost(id int) (model.BlogPost, error) {
 	var createdAt, lastUpdatedAt time.Time
 
 	row := config.DB.QueryRow(
-		"SELECT title, content, created_at, last_updated_at FROM blog WHERE id=?",
+		"SELECT title, html_content, created_at, last_updated_at FROM blog WHERE id=?",
 		id,
 	)
 	err := row.Scan(&title, &content, &createdAt, &lastUpdatedAt)
@@ -60,8 +60,9 @@ func GetBlogPost(id int) (model.BlogPost, error) {
 
 func CreateBlogPost(title, content string) error {
 	_, err := config.DB.Exec(
-		"INSERT INTO blog (title, content, created_at, last_updated_at) VALUES (?, ?, ?, ?)",
+		"INSERT INTO blog (title, markdown_content, html_content, created_at, last_updated_at) VALUES (?, ?, ?, ?, ?)",
 		title,
+		content,
 		content,
 		time.Now(),
 		time.Now(),
@@ -71,8 +72,9 @@ func CreateBlogPost(title, content string) error {
 
 func EditBlogPost(id int, title, content string) error {
 	res, err := config.DB.Exec(
-		"UPDATE blog SET title = ?, content = ?, last_updated_at = ? WHERE id = ?",
+		"UPDATE blog SET title = ?, markdown_content = ?, html_content = ?, last_updated_at = ? WHERE id = ?",
 		title,
+		content,
 		content,
 		time.Now(),
 		id,

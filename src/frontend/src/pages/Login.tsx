@@ -31,6 +31,7 @@ export default function Login() {
     const body = await res.json();
     localStorage.setItem("authToken", body.token);
     localStorage.setItem("authLevel", body.authLevel);
+    localStorage.setItem("email", email);
     navigate("/");
   }
 

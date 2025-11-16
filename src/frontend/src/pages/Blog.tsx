@@ -35,7 +35,7 @@ export default function Blog() {
       <DefaultHeader/>
       <main>
         <h1>{blog?.title}</h1>
-        <h3>{blog?.createdAt?.toDateString()}</h3>
+        <p className="text-gray">{blog?.createdAt?.toDateString()}</p>
         {blog?.content}
       </main>
     </>

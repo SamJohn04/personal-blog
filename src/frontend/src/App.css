@@ -64,6 +64,10 @@ input {
   padding: 0.25rem 0.75rem;
 }
 
+.text-gray {
+  color: #AAA;
+}
+
 #signup-link-login-page, #login-link-signup-page {
   color: #AAA;
   text-align: center;

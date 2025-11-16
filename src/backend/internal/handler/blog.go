@@ -64,7 +64,8 @@ func CreateBlog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = repository.CreateBlogPost(req.Title, req.Content, htmlContent)
+	sanitizedHTML := services.SanitizeHTML(htmlContent)
+	err = repository.CreateBlogPost(req.Title, req.Content, sanitizedHTML)
 	if err != nil {
 		log.Println("Error: creating blog post failed:", err)
 		http.Error(w, "create blog post failed", http.StatusInternalServerError)

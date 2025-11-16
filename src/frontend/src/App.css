@@ -32,6 +32,11 @@ a {
   padding-bottom: 0.25rem;
 }
 
+.pad-b-10 {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
 .main {
   margin: 0 auto;
   max-width: 1024px;
@@ -48,6 +53,10 @@ form {
 
 .col-span-full {
   grid-column: 1 / -1;
+}
+
+.grid {
+  display: grid;
 }
 
 input {

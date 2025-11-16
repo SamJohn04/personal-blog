@@ -28,10 +28,15 @@ export default function Home() {
     getBlogTitles();
   }, []);
 
+
   return (
     <>
       <DefaultHeader />
       <main className="main pad-t-8">
+      {
+        localStorage.getItem("authLevel") === "3" &&
+          <Link to="/blog/new" className="pad-b-10 grid"><button>New Blog</button></Link>
+      }
       {
         blogTitles.map(blogTitle => <span key={blogTitle.id} className="index-item pad-y-1">
                        <b>

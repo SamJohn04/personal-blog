@@ -32,7 +32,7 @@ func Auth(next http.Handler) http.Handler {
 		})
 		if err != nil {
 			log.Println("Error:", err)
-			http.Error(w, "Something went wrong", http.StatusBadGateway)
+			http.Error(w, "Something went wrong", http.StatusUnauthorized)
 			return
 		}
 

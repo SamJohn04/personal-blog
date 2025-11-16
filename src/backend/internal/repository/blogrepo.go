@@ -58,12 +58,12 @@ func GetBlogPost(id int) (model.BlogPost, error) {
 	}, nil
 }
 
-func CreateBlogPost(title, content string) error {
+func CreateBlogPost(title, md_content, html_content string) error {
 	_, err := config.DB.Exec(
 		"INSERT INTO blog (title, markdown_content, html_content, created_at, last_updated_at) VALUES (?, ?, ?, ?, ?)",
 		title,
-		content,
-		content,
+		md_content,
+		html_content,
 		time.Now(),
 		time.Now(),
 	)

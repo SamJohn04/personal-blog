@@ -8,6 +8,7 @@ import (
 
 	"github.com/SamJohn04/personal-blog/src/backend/internal/middleware"
 	"github.com/SamJohn04/personal-blog/src/backend/internal/repository"
+	"github.com/SamJohn04/personal-blog/src/backend/internal/services"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -55,7 +56,15 @@ func CreateBlog(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error while decoding body", http.StatusBadRequest)
 		return
 	}
-	err = repository.CreateBlogPost(req.Title, req.Content)
+
+	htmlContent, err := services.MarkdownToHTML(req.Content)
+	if err != nil {
+		log.Println("Error: convertion of content failed:", err)
+		http.Error(w, "conversion of body failed", http.StatusBadRequest)
+		return
+	}
+
+	err = repository.CreateBlogPost(req.Title, req.Content, htmlContent)
 	if err != nil {
 		log.Println("Error: creating blog post failed:", err)
 		http.Error(w, "create blog post failed", http.StatusInternalServerError)

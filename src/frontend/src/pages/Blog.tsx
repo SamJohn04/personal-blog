@@ -36,7 +36,7 @@ export default function Blog() {
       <main>
         <h1>{blog?.title}</h1>
         <p className="text-gray">{blog?.createdAt?.toDateString()}</p>
-        {blog?.content}
+        <div dangerouslySetInnerHTML={{ __html: blog?.content ?? "" }} />
       </main>
     </>
   )

@@ -29,13 +29,24 @@ func GetBlog(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Blog ID is missing", http.StatusNotFound)
 		return
 	}
-	blog, err := repository.GetBlogPost(id)
-	if err != nil {
-		log.Println("Error: Database error or blog missing:", err)
-		http.Error(w, "Blog is missing", http.StatusNotFound)
-		return
+
+	if r.URL.Query().Get("edit") != "true" {
+		blog, err := repository.GetBlogPost(id)
+		if err != nil {
+			log.Println("Error: Database error or blog missing:", err)
+			http.Error(w, "Blog is missing", http.StatusNotFound)
+			return
+		}
+		json.NewEncoder(w).Encode(blog)
+	} else {
+		blog, err := repository.GetBlogToEdit(id)
+		if err != nil {
+			log.Println("Error: Database error or blog missing:", err)
+			http.Error(w, "Blog is missing", http.StatusNotFound)
+			return
+		}
+		json.NewEncoder(w).Encode(blog)
 	}
-	json.NewEncoder(w).Encode(blog)
 }
 
 func CreateBlog(w http.ResponseWriter, r *http.Request) {

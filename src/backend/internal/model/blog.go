@@ -16,3 +16,9 @@ type BlogPost struct {
 	CreatedAt     time.Time `json:"createdAt"`
 	LastUpdatedAt time.Time `json:"lastUpdatedAt"`
 }
+
+type BlogPostEdit struct {
+	Id              int    `json:"id"`
+	Title           string `json:"title"`
+	MarkdownContent string `json:"content"`
+}

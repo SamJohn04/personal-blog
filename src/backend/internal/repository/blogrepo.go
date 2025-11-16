@@ -58,6 +58,25 @@ func GetBlogPost(id int) (model.BlogPost, error) {
 	}, nil
 }
 
+func GetBlogToEdit(id int) (model.BlogPostEdit, error) {
+	var title, content string
+
+	row := config.DB.QueryRow(
+		"SELECT title, markdown_content FROM blog WHERE id=?",
+		id,
+	)
+	err := row.Scan(&title, &content)
+	if err != nil {
+		return model.BlogPostEdit{}, err
+	}
+
+	return model.BlogPostEdit{
+		Id:              id,
+		Title:           title,
+		MarkdownContent: content,
+	}, nil
+}
+
 func CreateBlogPost(title, md_content, html_content string) error {
 	_, err := config.DB.Exec(
 		"INSERT INTO blog (title, markdown_content, html_content, created_at, last_updated_at) VALUES (?, ?, ?, ?, ?)",

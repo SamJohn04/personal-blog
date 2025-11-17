@@ -110,7 +110,16 @@ func EditBlog(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error while decoding body", http.StatusBadRequest)
 		return
 	}
-	err = repository.EditBlogPost(id, req.Title, req.Content)
+
+	htmlContent, err := services.MarkdownToHTML(req.Content)
+	if err != nil {
+		log.Println("Error: convertion of content failed:", err)
+		http.Error(w, "conversion of body failed", http.StatusBadRequest)
+		return
+	}
+
+	sanitizedHTML := services.SanitizeHTML(htmlContent)
+	err = repository.EditBlogPost(id, req.Title, req.Content, sanitizedHTML)
 	if err != nil {
 		log.Println("Error: editing blog post failed:", err)
 		http.Error(w, "edit blog post failed", http.StatusInternalServerError)

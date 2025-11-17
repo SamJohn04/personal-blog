@@ -77,24 +77,24 @@ func GetBlogToEdit(id int) (model.BlogPostEdit, error) {
 	}, nil
 }
 
-func CreateBlogPost(title, md_content, html_content string) error {
+func CreateBlogPost(title, mdContent, htmlContent string) error {
 	_, err := config.DB.Exec(
 		"INSERT INTO blog (title, markdown_content, html_content, created_at, last_updated_at) VALUES (?, ?, ?, ?, ?)",
 		title,
-		md_content,
-		html_content,
+		mdContent,
+		htmlContent,
 		time.Now(),
 		time.Now(),
 	)
 	return err
 }
 
-func EditBlogPost(id int, title, content string) error {
+func EditBlogPost(id int, title, mdContent, htmlContent string) error {
 	res, err := config.DB.Exec(
 		"UPDATE blog SET title = ?, markdown_content = ?, html_content = ?, last_updated_at = ? WHERE id = ?",
 		title,
-		content,
-		content,
+		mdContent,
+		htmlContent,
 		time.Now(),
 		id,
 	)

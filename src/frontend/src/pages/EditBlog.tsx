@@ -1,21 +1,37 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import DefaultHeader from "../components/DefaultHeader";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
-export function CreateBlog() {
+export function EditBlog() {
   const navigate = useNavigate();
+
+  const { id } = useParams();
 
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  async function create(event: FormEvent) {
+  useEffect(() => {
+    async function getBlog() {
+      const res = await fetch(`/api/blog/${id}?edit=true`);
+      if (!res.ok) {
+        return;
+      }
+      const data = await res.json();
+      setTitle(data.title);
+      setContent(data.content);
+      setLoading(false);
+    };
+    getBlog();
+  }, []);
+
+  async function update(event: FormEvent) {
     event.preventDefault();
     setLoading(true);
 
-    const res = await fetch("/api/blog", {
-      method: "POST",
+    const res = await fetch(`/api/blog/${id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
@@ -39,8 +55,8 @@ export function CreateBlog() {
     <>
       <DefaultHeader />
       <main>
-        <h1>New Blog</h1>
-        <form onSubmit={create}>
+        <h1>Edit Blog</h1>
+        <form onSubmit={update}>
           <label htmlFor="title">Title</label>
           <input id="title"
             value={title}
@@ -53,7 +69,7 @@ export function CreateBlog() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required />
-          <button className="col-span-full" disabled={loading} type="submit">Create Blog Post</button>
+          <button className="col-span-full" disabled={loading} type="submit">Edit Blog Post</button>
         </form>
       </main>
     </>

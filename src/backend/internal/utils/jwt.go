@@ -9,6 +9,7 @@ import (
 
 var jwtKey = []byte(config.Cfg.JWTSecret)
 
+// Generate a signed JWT string with an expiry set to 24 hours from now.
 func GenerateJWT(email string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"email": email,

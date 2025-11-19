@@ -12,6 +12,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+// GetBlogTitles returns the bllog titles as an encoded list of structs. May return an error code
 func GetBlogTitles(w http.ResponseWriter, r *http.Request) {
 	blogTitles, err := repository.GetBlogTitles()
 	if err != nil {

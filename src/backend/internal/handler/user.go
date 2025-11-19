@@ -11,6 +11,8 @@ import (
 	"github.com/SamJohn04/personal-blog/src/backend/internal/utils"
 )
 
+// RegisterUser checks the username, email, and password, hashes the password, and stores them.
+// The function will return either an error code or an empty body.
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		Username string `json:"username"`
@@ -30,7 +32,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashed, err := utils.HashPassword(req.Password)
+	hashed, err := utils.GenerateHashFromPassword(req.Password)
 	if err != nil {
 		log.Println("Error: Could not hash password:", err)
 		http.Error(w, "could not hash password", http.StatusInternalServerError)
@@ -52,7 +54,9 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-func Login(w http.ResponseWriter, r *http.Request) {
+// LoginUser logs in an existing user.
+// The function returns either an error code or the string encoding of the token and auth level (an integer from 0 to 3).
+func LoginUser(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -71,7 +75,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !utils.CheckPasswordHash(req.Password, user.Password) {
+	if !utils.CheckPasswordWithHash(req.Password, user.Password) {
 		log.Println("Error: Passwords do not match, or something went wrong")
 		http.Error(w, "invalid credentials", http.StatusUnauthorized)
 		return

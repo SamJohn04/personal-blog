@@ -8,6 +8,7 @@ import (
 	"github.com/SamJohn04/personal-blog/src/backend/internal/model"
 )
 
+// Get the blog titles as a list of structs.
 func GetBlogTitles() ([]model.BlogTitle, error) {
 	blogTitles := []model.BlogTitle{}
 
@@ -109,8 +110,8 @@ func EditBlogPost(id int, title, mdContent, htmlContent string) error {
 	return nil
 }
 
-// TODO make this function soft delete instead of hard delete
 func DeleteBlogPost(id int) error {
+	// TODO make this function soft delete instead of hard delete
 	res, err := config.DB.Exec("DELETE FROM blog WHERE id=?", id)
 	if err != nil {
 		return err

@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Logger returns a handler function that automatically logs the request at completion.
 func Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()

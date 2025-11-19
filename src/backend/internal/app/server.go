@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+// Run links all the handlers via chi Router and serves the production database as a FileServer.
 func Run() {
 	r := chi.NewRouter()
 
@@ -16,7 +17,7 @@ func Run() {
 		r.Use(middleware.Logger)
 
 		r.Post("/register", handler.RegisterUser)
-		r.Post("/login", handler.Login)
+		r.Post("/login", handler.LoginUser)
 
 		r.Get("/blogs", handler.GetBlogTitles)
 		r.Get("/blog/{id}", handler.GetBlog)

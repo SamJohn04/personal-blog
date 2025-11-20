@@ -18,6 +18,7 @@ func MarkdownToHTML(markdownContent string) (string, error) {
 
 var sanitizer = bluemonday.UGCPolicy()
 
+// Accepts an unsanitized HTML and returns the sanitized version.
 func SanitizeHTML(htmlContent string) string {
 	return sanitizer.Sanitize(htmlContent)
 }

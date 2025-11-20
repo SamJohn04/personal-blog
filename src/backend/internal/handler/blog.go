@@ -12,7 +12,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-// GetBlogTitles returns the bllog titles as an encoded list of structs. May return an error code
+// GetBlogTitles returns the blog titles as an encoded list of structs. May return an error code
 func GetBlogTitles(w http.ResponseWriter, r *http.Request) {
 	blogTitles, err := repository.GetBlogTitles()
 	if err != nil {
@@ -23,6 +23,8 @@ func GetBlogTitles(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(blogTitles)
 }
 
+// GetBlog returns a single blog as a struct. May return an error code.
+// Use with query edit = true to get the markdown content.
 func GetBlog(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
@@ -50,6 +52,9 @@ func GetBlog(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Create Blog returns a status code if it is successful.
+// Can return an error code.
+// Auth level 3 (Author) required.
 func CreateBlog(w http.ResponseWriter, r *http.Request) {
 	authLevel, err := middleware.GetUserAuth(r)
 	if err != nil || authLevel != 3 {
@@ -86,6 +91,9 @@ func CreateBlog(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
+// Edit Blog returns with a status code.
+// Can return an error code.
+// Auth level 3 (Author) required.
 func EditBlog(w http.ResponseWriter, r *http.Request) {
 	authLevel, err := middleware.GetUserAuth(r)
 	if err != nil || authLevel != 3 {
@@ -129,6 +137,9 @@ func EditBlog(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// Delete Blog returns with a status code.
+// Can return an error code.
+// Auth level 3 (Author) required.
 func DeleteBlog(w http.ResponseWriter, r *http.Request) {
 	authLevel, err := middleware.GetUserAuth(r)
 	if err != nil || authLevel != 3 {

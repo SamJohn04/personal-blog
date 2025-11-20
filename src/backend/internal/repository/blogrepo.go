@@ -37,6 +37,7 @@ func GetBlogTitles() ([]model.BlogTitle, error) {
 	return blogTitles, nil
 }
 
+// Get a blog post with the html content.
 func GetBlogPost(id int) (model.BlogPost, error) {
 	var title, content string
 	var createdAt, lastUpdatedAt time.Time
@@ -59,6 +60,7 @@ func GetBlogPost(id int) (model.BlogPost, error) {
 	}, nil
 }
 
+// Get a blog post with the markdown content.
 func GetBlogToEdit(id int) (model.BlogPostEdit, error) {
 	var title, content string
 
@@ -78,6 +80,7 @@ func GetBlogToEdit(id int) (model.BlogPostEdit, error) {
 	}, nil
 }
 
+// Create a blog post.
 func CreateBlogPost(title, mdContent, htmlContent string) error {
 	_, err := config.DB.Exec(
 		"INSERT INTO blog (title, markdown_content, html_content, created_at, last_updated_at) VALUES (?, ?, ?, ?, ?)",
@@ -90,6 +93,7 @@ func CreateBlogPost(title, mdContent, htmlContent string) error {
 	return err
 }
 
+// Edit a blog post, returning error if it is not found.
 func EditBlogPost(id int, title, mdContent, htmlContent string) error {
 	res, err := config.DB.Exec(
 		"UPDATE blog SET title = ?, markdown_content = ?, html_content = ?, last_updated_at = ? WHERE id = ?",
@@ -110,6 +114,7 @@ func EditBlogPost(id int, title, mdContent, htmlContent string) error {
 	return nil
 }
 
+// Delete the blog post, returning error if it is not found.
 func DeleteBlogPost(id int) error {
 	// TODO make this function soft delete instead of hard delete
 	res, err := config.DB.Exec("DELETE FROM blog WHERE id=?", id)

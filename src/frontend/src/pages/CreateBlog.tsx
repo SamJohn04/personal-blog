@@ -28,6 +28,12 @@ export function CreateBlog() {
 
     if (res.ok) {
       navigate("/");
+    } else if (res.status === 401) {
+      alert("Unauthorized; logging user out.");
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("authLevel");
+      localStorage.removeItem("email");
+      navigate("/");
     } else {
       console.error(await res.text());
       alert("Something went wrong!");

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"strconv"
 	"time"
 
 	"github.com/SamJohn04/personal-blog/src/backend/internal/config"
@@ -9,12 +10,15 @@ import (
 )
 
 // Get the blog titles as a list of structs.
-func GetBlogTitles() ([]model.BlogTitle, error) {
+func GetBlogTitles(maximumNumber int) ([]model.BlogTitle, error) {
 	blogTitles := []model.BlogTitle{}
 
-	rows, err := config.DB.Query(
-		"SELECT id, title, created_at, last_updated_at FROM blog",
-	)
+	queryStr := "SELECT id, title, created_at, last_updated_at FROM blog ORDER BY created_at DESC"
+	if maximumNumber >= 0 {
+		queryStr = queryStr + " LIMIT " + strconv.Itoa(maximumNumber)
+	}
+
+	rows, err := config.DB.Query(queryStr)
 	if err != nil {
 		return blogTitles, err
 	}

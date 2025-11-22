@@ -14,7 +14,13 @@ import (
 
 // GetBlogTitles returns the blog titles as an encoded list of structs. May return an error code
 func GetBlogTitles(w http.ResponseWriter, r *http.Request) {
-	blogTitles, err := repository.GetBlogTitles()
+	maximumNumber, err := strconv.Atoi(r.URL.Query().Get("q"))
+	if err != nil {
+		log.Println("Warn: strconv error:", err)
+		maximumNumber = -1 // If there is some error, then proceed with no limit
+	}
+
+	blogTitles, err := repository.GetBlogTitles(maximumNumber)
 	if err != nil {
 		log.Println("Error: DB error:", err)
 		http.Error(w, "Database error", http.StatusInternalServerError)

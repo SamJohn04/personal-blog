@@ -9,11 +9,11 @@ type BlogTitle = {
   lastEditedAt: Date
 }
 
-export default function Home() {
+export default function Blogs() {
   const [blogTitles, setBlogTitles] = useState<BlogTitle[]>([]);
   useEffect(() => {
     async function getBlogTitles() {
-      const res = await fetch("/api/blogs?q=5");
+      const res = await fetch("/api/blogs");
       if (!res.ok) {
         return;
       }
@@ -34,6 +34,10 @@ export default function Home() {
       <DefaultHeader />
       <main className="main pad-t-8">
       {
+        localStorage.getItem("authLevel") === "3" &&
+          <Link to="/blog/new" className="pad-b-10 grid"><button>New Blog</button></Link>
+      }
+      {
         blogTitles.map(blogTitle => <span key={blogTitle.id} className="index-item pad-y-1">
                        <b>
                         <Link to={`/blog/${blogTitle.id}`}>{blogTitle.title}</Link>
@@ -41,11 +45,6 @@ export default function Home() {
                        <span>{blogTitle.createdAt.toDateString()}</span>
                        </span>)
       }
-      <span className="index-item pad-y-1">
-        <Link
-          to="/blog/all"
-          className="col-span-full grid"><button>See More</button></Link>
-      </span>
       </main>
     </>
   );
